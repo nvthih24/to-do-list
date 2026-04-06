@@ -23,17 +23,6 @@ class AuthProvider with ChangeNotifier {
     return true;
   }
 
-  // Hàm Đăng nhập
-  Future<bool> login(String email, String password) async {
-    final user = _usersBox.get(email);
-    if (user != null && user.password == password) {
-      _currentUser = user;
-      await _sessionBox.put('loggedInEmail', email); // Lưu phiên
-      notifyListeners();
-      return true;
-    }
-    return false; // Sai email hoặc pass
-  }
 
   Future<void> logout() async {
     _currentUser = null;
