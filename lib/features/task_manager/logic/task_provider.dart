@@ -9,7 +9,7 @@ class TaskProvider extends ChangeNotifier {
   final Box _sessionBox =
       Hive.box('sessionBox'); // THÊM DÒNG NÀY: Mở session để lấy email
 
-  // --- GAMIFICATION VARIABLES ---
+  /*// --- GAMIFICATION VARIABLES ---
   late Box _statsBox;
 
   int _xp = 0;
@@ -27,7 +27,7 @@ class TaskProvider extends ChangeNotifier {
     if (level < 10) return "Junior Planner";
     if (level < 20) return "Senior Planner";
     return "Master of Time 👑";
-  }
+  }*/
 
   // --- SEARCH & FILTER ---
   String _searchQuery = '';
@@ -87,7 +87,7 @@ class TaskProvider extends ChangeNotifier {
     _initStats();
   }
 
-  // --- GAMIFICATION ---
+  /*// --- GAMIFICATION ---
   Future<void> _initStats() async {
     _statsBox = await Hive.openBox('user_stats');
     _xp = _statsBox.get('xp', defaultValue: 0);
@@ -135,7 +135,7 @@ class TaskProvider extends ChangeNotifier {
       _statsBox.put('last_date', _lastCompletionDate!.millisecondsSinceEpoch);
     }
     notifyListeners();
-  }
+  }*/
 
   // ================== TASK CRUD ==================
 
@@ -182,7 +182,7 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateTask({
+  /*void updateTask({
     required String id,
     required String title,
     required String note,
@@ -223,12 +223,12 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteTask(String id) {
+  /*void deleteTask(String id) {
     final task = _box.values.firstWhere((e) => e.id == id);
     NotificationService().cancelNotification(task.id.hashCode);
     task.delete();
     notifyListeners();
-  }
+  }*/
 
   void toggleTaskStatus(String id) {
     final task = _box.values.firstWhere((e) => e.id == id);
@@ -254,9 +254,9 @@ class TaskProvider extends ChangeNotifier {
     }
 
     task.save();
-    _updateGamification(task.isCompleted);
+    //_updateGamification(task.isCompleted);
     notifyListeners();
-  }
+  }*/
 
   // --- SEARCH & FILTER ---
   void setSearchQuery(String query) {
