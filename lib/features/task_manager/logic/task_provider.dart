@@ -182,7 +182,7 @@ class TaskProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /*void updateTask({
+  void updateTask({
     required String id,
     required String title,
     required String note,
@@ -221,7 +221,7 @@ class TaskProvider extends ChangeNotifier {
     );
 
     notifyListeners();
-  }*/
+  }
 
   void deleteTask(String id) {
     final task = _box.values.firstWhere((e) => e.id == id);
