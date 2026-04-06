@@ -9,7 +9,7 @@ class TaskProvider extends ChangeNotifier {
   final Box _sessionBox =
       Hive.box('sessionBox'); // THÊM DÒNG NÀY: Mở session để lấy email
 
-  /*// --- GAMIFICATION VARIABLES ---
+  // --- GAMIFICATION VARIABLES ---
   late Box _statsBox;
 
   int _xp = 0;
@@ -27,7 +27,7 @@ class TaskProvider extends ChangeNotifier {
     if (level < 10) return "Junior Planner";
     if (level < 20) return "Senior Planner";
     return "Master of Time 👑";
-  }*/
+  }
 
   // --- SEARCH & FILTER ---
   String _searchQuery = '';
@@ -254,7 +254,7 @@ class TaskProvider extends ChangeNotifier {
     }
 
     task.save();
-    //_updateGamification(task.isCompleted);
+    _updateGamification(task.isCompleted);
     notifyListeners();
   }*/
 
