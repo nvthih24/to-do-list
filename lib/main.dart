@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import font
+import 'core/constants/app_colors.dart';
+import 'data/models/task_model.dart';
+import 'features/task_manager/logic/task_provider.dart';
+import 'features/task_manager/logic/theme_provider.dart';
+import 'features/home/screens/pages.dart';
+import 'core/services/notification_service.dart';
+import 'data/models/user_model.dart';
+import 'package:provider/provider.dart';
+import 'features/auth/logic/auth_provider.dart';
+import 'features/auth/screens/login_screen.dart';
+import 'features/home/screens/home_screen.dart';
+
+const String taskBoxName = 'tasks';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(TaskAdapter());
+  await Hive.openBox<Task>(taskBoxName);
+  await Hive.openBox('settings');
+  await Hive.openBox<UserModel>('usersBox'); // Lưu danh sách tài khoản
+  await Hive.openBox('sessionBox'); // Lưu phiên đăng nhập (ai đang dùng app)
+
+  try {
+    await NotificationService().init();
+  } catch (e) {
+    debugPrint('Lỗi khởi tạo NotificationService: $e');
+  }
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = context.watch<ThemeProvider>().isDarkMode;
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Simple Task',
+        themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+        // === THIẾT LẬP THEME SÁNG TINH TẾ ===
+        theme: ThemeData(
+          brightness: Brightness.light,
+          scaffoldBackgroundColor: AppColors.scaffoldBackground,
+          primaryColor: AppColors.primary,
+          cardColor: AppColors.cardColor,
+          // Font chữ sạch sẽ (Inter hoặc Roboto)
+          textTheme: GoogleFonts.nunitoTextTheme().apply(
+            bodyColor: AppColors.textPrimary,
+            displayColor: AppColors.textPrimary,
+          ),
+
+          appBarTheme: const AppBarTheme(
+            backgroundColor: AppColors.scaffoldBackground,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            iconTheme: IconThemeData(color: AppColors.textPrimary),
+            titleTextStyle: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColors.primary,
+              background: AppColors.scaffoldBackground,
+              brightness: Brightness.light,
+              surface: AppColors.cardColor),
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: AppColors.scaffoldDark,
+          primaryColor: AppColors.primary,
+          cardColor: AppColors.cardDark, // Màu thẻ tối
+          // Cấu hình chữ cho nền tối
+          textTheme: GoogleFonts.nunitoTextTheme().apply(
+            bodyColor: AppColors.textPrimaryDark,
+            displayColor: AppColors.textPrimaryDark,
+          ),
+          colorScheme: const ColorScheme.dark(
+            primary: AppColors.primary,
+            surface: AppColors.cardDark,
+            background: AppColors.scaffoldDark,
+          ),
+          useMaterial3: true,
+        ),
+        home: const Pages());
+  }
+}
