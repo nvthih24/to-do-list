@@ -15,14 +15,26 @@ class AuthProvider with ChangeNotifier {
       return false; // Email đã tồn tại
     }
     final newUser = UserModel(
-        id: DateTime.now().toString(),
-        email: email,
-        password: password,
-        displayName: name);
+      id: DateTime.now().toString(),
+      email: email,
+      password: password,
+      displayName: name,
+    );
     await _usersBox.put(email, newUser); // Dùng email làm Key luôn cho dễ tìm
     return true;
   }
 
+  // Hàm Đăng nhập
+  Future<bool> login(String email, String password) async {
+    final user = _usersBox.get(email);
+    if (user != null && user.password == password) {
+      _currentUser = user;
+      await _sessionBox.put('loggedInEmail', email); // Lưu phiên
+      notifyListeners();
+      return true;
+    }
+    return false; // Sai email hoặc pass
+  }
 
   Future<void> logout() async {
     _currentUser = null;
