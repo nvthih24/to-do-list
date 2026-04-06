@@ -221,14 +221,14 @@ class TaskProvider extends ChangeNotifier {
     );
 
     notifyListeners();
-  }
+  }*/
 
-  /*void deleteTask(String id) {
+  void deleteTask(String id) {
     final task = _box.values.firstWhere((e) => e.id == id);
     NotificationService().cancelNotification(task.id.hashCode);
     task.delete();
     notifyListeners();
-  }*/
+  }
 
   void toggleTaskStatus(String id) {
     final task = _box.values.firstWhere((e) => e.id == id);
