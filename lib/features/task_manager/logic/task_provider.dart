@@ -87,7 +87,7 @@ class TaskProvider extends ChangeNotifier {
     _initStats();
   }
 
-  /*// --- GAMIFICATION ---
+  // --- GAMIFICATION ---
   Future<void> _initStats() async {
     _statsBox = await Hive.openBox('user_stats');
     _xp = _statsBox.get('xp', defaultValue: 0);
@@ -135,7 +135,7 @@ class TaskProvider extends ChangeNotifier {
       _statsBox.put('last_date', _lastCompletionDate!.millisecondsSinceEpoch);
     }
     notifyListeners();
-  }*/
+  }
 
   // ================== TASK CRUD ==================
 
